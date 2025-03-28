@@ -322,7 +322,7 @@ local v15 = v14:CreateWindow({
     MinimizeKey = Enum.KeyCode.End
 });
 local v16 = {
-    Home = v15:AddTab({
+    Home = v15a:AddTab({
         Title = "Thông Tin"
     }),
     Main = v15:AddTab({
@@ -2676,16 +2676,16 @@ end
 if game:GetService("ReplicatedStorage").Effect.Container:FindFirstChild("Respawn") then
     game:GetService("ReplicatedStorage").Effect.Container.Respawn:Destroy();
 end
-v16.Home:AddButton({
+v16a.Home:AddButton({
     Title = "Discord",
     Description = "Giao Lưu",
     Callback = function()
-        setclipboard("https://discord.gg/PqnGbHmU");
-v16.Home:AddButton({
+        setclipboard("https://discord.gg/PqnGbHmU");    
+v16b.Home:AddButton({
     Title = "Discord",
     Description = "Giao Lưu",
     Callback = function()
-        setclipboard("https://discord.gg/PqnGbHmU");                
+        setclipboard("https://discord.gg/PqnGbHmU");     
     end
 });
 _G.FastAttackStrix_Mode = "Super Fast Attack";
