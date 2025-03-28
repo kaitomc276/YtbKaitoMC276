@@ -2680,12 +2680,7 @@ v16.Home:AddButton({
     Title = "Discord",
     Description = "Giao Lưu",
     Callback = function()
-        setclipboard("https://discord.gg/PqnGbHmU");
-v16.Home:AddButton({
-    Title = "Discord",
-    Description = "Giao Lưu",
-    Callback = function()
-        setclipboard("https://discord.gg/PqnGbHmU");                
+        setclipboard("https://discord.gg/PqnGbHmU");             
     end
 });
 _G.FastAttackStrix_Mode = "Super Fast Attack";
