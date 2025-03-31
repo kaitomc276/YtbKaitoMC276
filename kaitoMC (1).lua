@@ -1,7 +1,7 @@
--- discord.gg/PqnGbHmU
+-- discord.gg/Bu9897kJ
 
 
-shared.LoaderTitle = "Đăng Ký Kênh kaitoMC276";
+shared.LoaderTitle = "Đăng Ký Kênh KaitoMC276 ";
 shared.LoaderKeyFrames = {
     [1] = {
         1,
@@ -105,7 +105,7 @@ local v8 = CreateObject("TextLabel", {
     Name = "UserName",
     Parent = v6,
     BackgroundTransparency = 1,
-    Text = "Youtube: kaitoMC276",
+    Text = "Youtube: KaitoMC276",
     Position = UDim2.new(0, 75, 0, 10),
     Size = UDim2.new(0, 200, 0, 50),
     Font = Enum.Font.GothamBold,
@@ -311,18 +311,18 @@ v5:Destroy();
 --         pcall(v422);
 --     end
 -- end);
-local v14 = loadstring(game:HttpGet("https://raw.githubusercontent.com/SkibidiHub111/Gui11/refs/heads/main/Idk"))();
+local v14 = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))();
 local v15 = v14:CreateWindow({
-    Title = "kaitoMC276 Hub",
+    Title = "KaitoMC276 Hub",
     SubTitle = "Blox Fruit",
     TabWidth = 160,
-    137349437844122 = "137349437844122",
+    Theme = "Aqual",
     Acrylic = false,
     Size = UDim2.fromOffset(500, 320),
     MinimizeKey = Enum.KeyCode.End
 });
 local v16 = {
-    Home = v15a:AddTab({
+    Home = v15:AddTab({
         Title = "Thông Tin"
     }),
     Main = v15:AddTab({
@@ -2676,16 +2676,11 @@ end
 if game:GetService("ReplicatedStorage").Effect.Container:FindFirstChild("Respawn") then
     game:GetService("ReplicatedStorage").Effect.Container.Respawn:Destroy();
 end
-v16a.Home:AddButton({
+v16.Home:AddButton({
     Title = "Discord",
     Description = "Giao Lưu",
     Callback = function()
-        setclipboard("https://discord.gg/PqnGbHmU");    
-v16b.Home:AddButton({
-    Title = "Discord",
-    Description = "Giao Lưu",
-    Callback = function()
-        setclipboard("https://discord.gg/PqnGbHmU");     
+        setclipboard("https://discord.gg/Bu9897kJ");
     end
 });
 _G.FastAttackStrix_Mode = "Super Fast Attack";
@@ -3879,7 +3874,7 @@ if Sea3 then
             _G.AutoFindPrehistoric = false;
             if not v513 then
                 v14:Notify({
-                    Title = "kaitoMC276",
+                    Title = "KaitoMC276",
                     Content = "Đảo Dung Nham Tìm Thấy",
                     Duration = 10
                 });
@@ -3973,7 +3968,7 @@ if Sea3 then
             _G.AutoFindMirage = false;
             if not v513 then
                 v14:Notify({
-                    Title = "kaitoMC276",
+                    Title = "KaitoMC276",
                     Content = "Đảo Bí Ẩn Tìm Thấy",
                     Duration = 10
                 });
@@ -4067,7 +4062,7 @@ if Sea3 then
             _G.AutoFindFrozen = false;
             if not v513 then
                 v14:Notify({
-                    Title = "kaitoMC276",
+                    Title = "KaitoMC276",
                     Content = "Đảo Leviathan Tìm Thấy",
                     Duration = 10
                 });
@@ -9329,7 +9324,7 @@ spawn(function()
     end
 end);
 v14:Notify({
-    Title = "kaitoMC276",
+    Title = "KaitoMC276",
     Content = "Tải Xong",
     Duration = 10
 });
