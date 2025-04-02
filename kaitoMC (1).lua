@@ -1,31 +1,32 @@
+local Rayfield = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 
 local Window = Rayfield:CreateWindow({
-   Name = "Blox Fruits Script",
-   LoadingTitle = "FolderName"
-   LoadingSubtitle = "by RetributionMK8",
+   Name = "ngu",
+   LoadingTitle = "Rayfield Interface Suite",
+   LoadingSubtitle = "by name",
    ConfigurationSaving = {
       Enabled = true,
-      FolderName = kk
+      FolderName = ngu
       FileName = "RBS"
    },
    Discord = {
       Enabled = false,
       Invite = "noinvitelink", 
-      RememberJoins = 
+      RememberJoins = false  
    },
-   KeySystem = false, -- Set this to true to use our key system
+   KeySystem = false, 
    KeySettings = {
-      Title = "Untitled",
+      Title = "ngu",
       Subtitle = "Key System",
-      Note = "No method of obtaining the key is provided",
-      FileName = "Key", 
+      Note = "",
+      FileName = "Key",
       SaveKey = true, 
-      GrabKeyFromSite = 
-      Key = {"Hello"}  
+      GrabKeyFromSite = false, 
+      Key = {"Hello"} 
    }
 })
 
-local MainTab = Window:CreateTab("Fruits", nil) -- Title, Image
+local MainTab = Window:CreateTab("Fruits", nil) -- Title, Image = "rbxassetid://83190276951914",
 local MainSection = MainTab:CreateSection("Blox Fruits")
 
 Rayfield:Notify({
@@ -46,6 +47,7 @@ Rayfield:Notify({
 local Button = MainTab:CreateButton({
    Name = "Find Fruits",
    Callback = function()
+loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
    end,
 })
 
