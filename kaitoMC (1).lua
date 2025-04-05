@@ -24,8 +24,8 @@ local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/
 repeat wait() until game:IsLoaded()
 
 local Window = Fluent:CreateWindow({
-    Title = "Kun Roblox Tổng Hợp",
-    SubTitle = "Blox Fruit",
+    Title = "kaitoMC276",
+    SubTitle = "blox fruit",
     TabWidth = 157,
     Size = UDim2.fromOffset(500, 320),
     Acrylic = true,
@@ -42,14 +42,11 @@ Tabs.Main1:AddButton({
     Title = "Redz Hub",
     Description = "",
     Callback = function()
-        local Settings = {
-            JoinTeam = "Pirates", -- Pirates/Marines
-            Translator = true     -- true/false
-        }
-
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/newredz/BloxFruits/refs/heads/main/Source.luau"))(Settings)
-    end
-})
+        Main:AddToggle("ToggleLevel", {
+    Title = "Cày Cấp",
+    Description = "",
+    Default = false
+});
 
 Tabs.Main:AddButton({
     Title = "YouTube KunRoblox",
