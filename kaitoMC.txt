@@ -109,7 +109,7 @@ function checkDevice()
             local FeariseToggle = CreateToggle()
             FeariseToggle.MouseButton1Click:Connect(function()
                 for _, guiObject in ipairs(game:GetService("CoreGui"):GetChildren()) do
-                    if guiObject.Name == "TBoyRoblox EHub" and guiObject:IsA("ScreenGui") then
+                    if guiObject.Name == "kaitoMC EHub" and guiObject:IsA("ScreenGui") then
                         for FrameIndex, FrameValue in pairs(guiObject:GetChildren()) do
                             if FrameValue:IsA("Frame") and FrameValue:FindFirstChild("CanvasGroup") then
                                 FrameValue.Visible = not FrameValue.Visible
@@ -119,7 +119,7 @@ function checkDevice()
                 end
             end)
             game:GetService("CoreGui").ChildRemoved:Connect(function(Value)
-                if Value.Name == "TBoyRoblox  Hub" then
+                if Value.Name == "kaitoMC  Hub" then
                     zEEToggle.Parent.Parent:Destroy()
                 end
             end)
@@ -169,8 +169,8 @@ local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/d
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
 
 local Window = Fluent:CreateWindow({
-    Title = "TBoyRoblox  Hub" .. " | ".."BlueLock : Rival".." | ".."[Version 4]",
-    SubTitle = "by TBoyRoblox  Skid",
+    Title = "kaitoMC  Hub" .. " | ".."BlueLock : Rival".." | ".."[Version 4]",
+    SubTitle = "by kaitoMC  Skid",
     TabWidth = 160,
     Size =  Device, --UDim2.fromOffset(480, 360), --default size (580, 460)
     Acrylic = false, -- à¸à¸²à¸£à¹€à¸šà¸¥à¸­à¸­à¸²à¸ˆà¸•à¸£à¸§à¸ˆà¸ˆà¸±à¸šà¹„à¸”à¹‰ à¸à¸²à¸£à¸•à¸±à¹‰à¸‡à¸„à¹ˆà¸²à¸™à¸µà¹‰à¹€à¸›à¹‡à¸™ false à¸ˆà¸°à¸›à¸´à¸”à¸à¸²à¸£à¹€à¸šà¸¥à¸­à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”
@@ -503,13 +503,13 @@ do
             if getgenv().Settings.EffectsDropdown ~= "" then
                 game:GetService("ReplicatedStorage").Packages.Knit.Services.CustomizationService.RE.Customize:FireServer("GoalEffects", getgenv().Settings.EffectsDropdown)
                 Fluent:Notify({
-                    Title = "TBoyRoblox  Hub",
+                    Title = "kaitoMC  Hub",
                     Content = "Your Wear Goal Effect "..tostring(getgenv().Settings.EffectsDropdown),
                     Duration = 5
                 })
             else
                 Fluent:Notify({
-                    Title = "TBoyRoblox  Hub",
+                    Title = "kaitoMC  Hub",
                     Content = "Please Select Goal Effect Before Use.",
                     Duration = 3
                 })
@@ -537,13 +537,13 @@ do
             if getgenv().Settings.CosmeticsDropdown ~= "" then
                 game:GetService("ReplicatedStorage").Packages.Knit.Services.CustomizationService.RE.Customize:FireServer("Cosmetics", getgenv().Settings.CosmeticsDropdown)
                 Fluent:Notify({
-                    Title = "TBoyRoblox  Hub",
+                    Title = "kaitoMC  Hub",
                     Content = "Your Wear Cosmetic "..tostring(getgenv().Settings.CosmeticsDropdown),
                     Duration = 5
                 })
             else
                 Fluent:Notify({
-                    Title = "TBoyRoblox  Hub",
+                    Title = "kaitoMC  Hub",
                     Content = "Please Select Cosmetic Before Use.",
                     Duration = 3
                 })
@@ -571,13 +571,13 @@ do
             if getgenv().Settings.CardsDropdown ~= "" then
                 game:GetService("ReplicatedStorage").Packages.Knit.Services.CustomizationService.RE.Customize:FireServer("Cards", getgenv().Settings.CardsDropdown)
                 Fluent:Notify({
-                    Title = "TBoyRoblox  Hub",
+                    Title = "kaitoMC  Hub",
                     Content = "Your Wear Card "..tostring(getgenv().Settings.CardsDropdown),
                     Duration = 5
                 })
             else
                 Fluent:Notify({
-                    Title = "TBoyRoblox  Hub",
+                    Title = "kaitoMC  Hub",
                     Content = "Please Select Card Before Use.",
                     Duration = 3
                 })
@@ -1024,7 +1024,7 @@ do
     end
     Function_Storage.CreateFeariseHubMobileToggle = function()
         local feariseHubMobile = Instance.new("ScreenGui")
-		feariseHubMobile.Name = "TBoyRobloxHub"
+		feariseHubMobile.Name = "KaitoMC"
         feariseHubMobile.IgnoreGuiInset = true
         feariseHubMobile.ScreenInsets = Enum.ScreenInsets.DeviceSafeInsets
         feariseHubMobile.ResetOnSpawn = false
@@ -2396,13 +2396,13 @@ do
                         KaiserToggle:SetValue(Debris_Variables.KaiserKeybide.State)
                         if Debris_Variables.KaiserKeybide.State then
                             Fluent:Notify({
-                                Title = "TBoyRoblox  Hub",
+                                Title = "kaitoMC  Hub",
                                 Content = "Kaiser Impack Actived.",
                                 Duration = 3
                             })
                         else
                             Fluent:Notify({
-                                Title = "TBoyRoblox  Hub",
+                                Title = "kaitoMC  Hub",
                                 Content = "Kaiser Impack Not Actived.",
                                 Duration = 3
                             })
@@ -2413,13 +2413,13 @@ do
                         CurveShotProMaxToggle:SetValue(Debris_Variables.CurveShotProMaxKeybind.State)
                         if Debris_Variables.CurveShotProMaxKeybind.State then
                             Fluent:Notify({
-                                Title = "TBoyRoblox  Hub",
+                                Title = "kaitoMC  Hub",
                                 Content = "CurveShotProMax Actived.",
                                 Duration = 3
                             })
                         else
                             Fluent:Notify({
-                                Title = "TBoyRoblox  Hub",
+                                Title = "kaitoMC  Hub",
                                 Content = "CurveShotProMax Not Actived.",
                                 Duration = 3
                             })
@@ -2430,13 +2430,13 @@ do
                         AutoGoalKeeper:SetValue(Debris_Variables.AutoGKKeybind.State)
                         if Debris_Variables.AutoGKKeybind.State then
                             Fluent:Notify({
-                                Title = "TBoyRoblox  Hub",
+                                Title = "kaitoMC  Hub",
                                 Content = "AutoGK Actived.",
                                 Duration = 3
                             })
                         else
                             Fluent:Notify({
-                                Title = "TBoyRoblox  Hub",
+                                Title = "kaitoMC  Hub",
                                 Content = "AutoGK Not Actived.",
                                 Duration = 3
                             })
@@ -2447,20 +2447,20 @@ do
                         HitboxToggle:SetValue(Debris_Variables.HitboxKeybind.State)
                         if Debris_Variables.HitboxKeybind.State then
                             Fluent:Notify({
-                                Title = "TBoyRoblox  Hub",
+                                Title = "kaitoMC  Hub",
                                 Content = "Hitbox Actived.",
                                 Duration = 3
                             })
                         else
                             Fluent:Notify({
-                                Title = "TBoyRoblox  Hub",
+                                Title = "kaitoMC  Hub",
                                 Content = "Hitbox Not Actived.",
                                 Duration = 3
                             })
                         end
                     end)
                     game:GetService("CoreGui").ChildRemoved:Connect(function(Value)
-                        if Value.Name == "TBoyRoblox Hub" then
+                        if Value.Name == "kaitoMC Hub" then
                             MobileUI.feariseHubMobileUI:Destroy()
                         end
                     end)
@@ -2476,8 +2476,8 @@ end
 SaveManager:SetLibrary(Fluent)
 InterfaceManager:SetLibrary(Fluent)
 
-SaveManager:SetFolder("TBoyRoblox  Hub")
-InterfaceManager:SetFolder("TBoyRoblox  Hub")
+SaveManager:SetFolder("kaitoMC  Hub")
+InterfaceManager:SetFolder("kaitoMC  Hub")
 
 SaveManager:BuildConfigSection(Tabs.pageSettings)
 InterfaceManager:BuildInterfaceSection(Tabs.pageSettings)
@@ -2497,7 +2497,7 @@ task.spawn(function()
 end)
 
 Fluent:Notify({
-    Title = "TBoyRoblox  Hub",
+    Title = "kaitoMC  Hub",
     Content = "Anti AFK Is Actived",
     Duration = 5
 })
