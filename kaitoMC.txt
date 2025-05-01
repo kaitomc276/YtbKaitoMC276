@@ -1,22 +1,132 @@
--- 1. Tạo UI local screenGui = Instance.new("ScreenGui") screenGui.Name = "KaitoMCUI" screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+-- UI đơn giản
+local gui = Instance.new("ScreenGui", game.Players.LocalPlayer:WaitForChild("PlayerGui"))
+gui.Name = "KaitoMCUI"
 
-local frame = Instance.new("Frame") frame.Size = UDim2.new(0, 300, 0, 300) frame.Position = UDim2.new(0.5, -150, 0.5, -150) frame.BackgroundTransparency = 1 frame.Parent = screenGui
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.new(0, 300, 0, 100)
+frame.Position = UDim2.new(0.5, -150, 0.05, 0)
+frame.BackgroundTransparency = 1
 
-local imageLabel = Instance.new("ImageLabel") imageLabel.Size = UDim2.new(1, 0, 1, 0) imageLabel.Position = UDim2.new(0, 0, 0, 0) imageLabel.Image = "rbxassetid://137349437844122" imageLabel.BackgroundTransparency = 1 imageLabel.Parent = frame
+local image = Instance.new("ImageLabel", frame)
+image.Size = UDim2.new(0, 100, 0, 100)
+image.Position = UDim2.new(0, 0, 0, 0)
+image.BackgroundTransparency = 1
+image.Image = "rbxassetid://137349437844122"
 
-local textLabel1 = Instance.new("TextLabel") textLabel1.Size = UDim2.new(1, 0, 0.2, 0) textLabel1.Position = UDim2.new(0, 0, 0, 0) textLabel1.Text = "kaitoMC276" textLabel1.TextColor3 = Color3.fromRGB(255, 255, 255) textLabel1.TextScaled = true textLabel1.BackgroundTransparency = 1 textLabel1.Parent = frame
+local text = Instance.new("TextLabel", frame)
+text.Size = UDim2.new(1, -100, 1, 0)
+text.Position = UDim2.new(0, 100, 0, 0)
+text.Text = "Đang farm level..."
+text.TextColor3 = Color3.fromRGB(255,255,255)
+text.BackgroundTransparency = 1
+text.TextScaled = true
 
-local textLabel2 = Instance.new("TextLabel") textLabel2.Size = UDim2.new(1, 0, 0.2, 0) textLabel2.Position = UDim2.new(0, 0, 0.2, 0) textLabel2.Text = "Nhớ đăng kí kênh tôi" textLabel2.TextColor3 = Color3.fromRGB(255, 255, 255) textLabel2.TextScaled = true textLabel2.BackgroundTransparency = 1 textLabel2.Parent = frame
+-- Auto nhập code
+local codes = {"kittgaming", "Sub2Fer999", "Enyu_is_Pro", "Magicbus", "JCWK", "Starcodeheo"}
+for _,v in pairs(codes) do
+    pcall(function()
+        game:GetService("ReplicatedStorage").Remotes.Redeem:InvokeServer(v)
+    end)
+end
 
--- 2. Auto nhập code x2 EXP local codes = {"SUB2GAMERROBOT_RESET1", "kittgaming", "fudd10_v2", "Starcodeheo", "Sub2NoobMaster123", "Axiore", "TantaiGaming"} for _, code in pairs(codes) do pcall(function() game:GetService("ReplicatedStorage").Remotes.Redeem:InvokeServer(code) end) end
+-- Auto mua Haki
+spawn(function()
+    while wait(5) do
+        if not game.Players.LocalPlayer.Character:FindFirstChild("HasBuso") then
+            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyHaki")
+        end
+    end
+end)
 
--- 3. Auto mua Haki spawn(function() while wait(5) do if not game.Players.LocalPlayer.Character:FindFirstChild("HasBuso") then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyHaki") end end end)
+-- Auto nâng điểm
+spawn(function()
+    while wait(10) do
+        local stats = game.Players.LocalPlayer.Data.Stats
+        local p = stats.Available.Value
+        if p > 0 then
+            local half = math.floor(p/2)
+            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AddPoint", "Melee", half)
+            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AddPoint", "Energy", p - half)
+        end
+    end
+end)
 
--- 4. Auto nâng điểm Melee và Năng lượng spawn(function() while wait(10) do local points = game.Players.LocalPlayer.Data.Stats.Available.Value if points > 0 then game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AddPoint","Melee", points) end end end)
+-- Danh sách nhiệm vụ
+function getQuest()
+    local lv = game.Players.LocalPlayer.Data.Level.Value
+    if lv < 10 then return {"BanditQuest1", "Bandit", CFrame.new(1038, 16, 1547)}
+    elseif lv < 30 then return {"JungleQuest", "Monkey", CFrame.new(-1602, 37, 153)}
+    elseif lv < 60 then return {"PirateQuest1", "Pirate", CFrame.new(-1144, 14, 3825)}
+    elseif lv < 90 then return {"DesertQuest", "Desert Bandit", CFrame.new(924, 7, 4492)}
+    elseif lv < 120 then return {"SnowQuest", "Snow Bandit", CFrame.new(1388, 87, -1296)}
+    elseif lv < 150 then return {"MarineQuest2", "Chief Petty Officer", CFrame.new(-4505, 20, 4260)}
+    elseif lv < 190 then return {"SkyQuest", "Sky Bandit", CFrame.new(-4867, 717, -2623)}
+    elseif lv < 275 then return {"FountainQuest", "Galley Pirate", CFrame.new(5226, 38, 4050)}
+    elseif lv < 850 then return {"Area1", "Raider", CFrame.new(-391, 73, 1447)}
+    elseif lv < 1000 then return {"Area2", "Swan Pirate", CFrame.new(-495, 73, 300)}
+    elseif lv < 1100 then return {"Area3", "Marine Lieutenant", CFrame.new(2150, 20, -1200)}
+    elseif lv < 1250 then return {"Area4", "Magma Ninja", CFrame.new(-5850, 20, -1300)}
+    elseif lv < 1350 then return {"ShipQuest1", "Ship Deckhand", CFrame.new(1038, 20, -1400)}
+    elseif lv < 1500 then return {"FrostQuest", "Arctic Warrior", CFrame.new(5500, 30, -5000)}
+    elseif lv < 1575 then return {"ForgottenQuest", "Pirate Millionaire", CFrame.new(-3050, 20, -10100)}
+    elseif lv < 1700 then return {"HydraQuest", "Dragon Crew Warrior", CFrame.new(5800, 40, -250)}
+    elseif lv < 1775 then return {"GreatTreeQuest", "Marine Commodore", CFrame.new(2600, 30, 1200)}
+    elseif lv < 1975 then return {"TurtleQuest", "Fishman Raider", CFrame.new(-10500, 330, -8750)}
+    elseif lv < 2075 then return {"HauntedQuest", "Reborn Skeleton", CFrame.new(-9500, 140, 6000)}
+    elseif lv < 2250 then return {"TreatQuest", "Peanut Scout", CFrame.new(-12000, 200, -3000)}
+    elseif lv <= 2550 then return {"TikiQuest", "Candy Rebel", CFrame.new(-16500, 250, -7500)}
+    else return nil end
+end
 
--- 5. Tự động nhận nhiệm vụ theo cấp function getQuest() local lv = game.Players.LocalPlayer.Data.Level.Value if lv < 10 then return {"BanditQuest1", "Bandit", CFrame.new(1038, 16, 1547)} elseif lv < 30 then return {"JungleQuest", "Monkey", CFrame.new(-1602, 37, 153)} elseif lv < 60 then return {"PirateQuest1", "Pirate", CFrame.new(-1144, 14, 3825)} elseif lv < 90 then return {"DesertQuest", "Desert Bandit", CFrame.new(924, 7, 4492)} elseif lv < 120 then return {"SnowQuest", "Snow Bandit", CFrame.new(1388, 87, -1296)} elseif lv < 150 then return {"MarineQuest2", "Chief Petty Officer", CFrame.new(-4505, 20, 4260)} elseif lv < 190 then return {"SkyQuest", "Sky Bandit", CFrame.new(-4867, 717, -2623)} elseif lv < 275 then return {"FountainQuest", "Galley Pirate", CFrame.new(5226, 38, 4050)} elseif lv < 850 then return {"Area1", "Raider", CFrame.new(-391, 73, 1447)} elseif lv < 1000 then return {"Area2", "Swan Pirate", CFrame.new(-495, 73, 300)} elseif lv < 1100 then return {"Area3", "Marine Lieutenant", CFrame.new(2150, 20, -1200)} elseif lv < 1250 then return {"Area4", "Magma Ninja", CFrame.new(-5850, 20, -1300)} elseif lv < 1350 then return {"ShipQuest1", "Ship Deckhand", CFrame.new(1038, 20, -1400)} elseif lv < 1500 then return {"FrostQuest", "Arctic Warrior", CFrame.new(5500, 30, -5000)} elseif lv < 1575 then return {"ForgottenQuest", "Pirate Millionaire", CFrame.new(-3050, 20, -10100)} elseif lv < 1700 then return {"HydraQuest", "Dragon Crew Warrior", CFrame.new(5800, 40, -250)} elseif lv < 1775 then return {"GreatTreeQuest", "Marine Commodore", CFrame.new(2600, 30, 1200)} elseif lv < 1975 then return {"TurtleQuest", "Fishman Raider", CFrame.new(-10500, 330, -8750)} elseif lv < 2075 then return {"HauntedQuest", "Reborn Skeleton", CFrame.new(-9500, 140, 6000)} elseif lv < 2250 then return {"TreatQuest", "Peanut Scout", CFrame.new(-12000, 200, -3000)} elseif lv <= 2550 then return {"TikiQuest", "Candy Rebel", CFrame.new(-16500, 250, -7500)} else return nil end end
+-- Auto farm
+spawn(function()
+    while wait(1) do
+        local q = getQuest()
+        if q then
+            local quest, mob, pos = unpack(q)
+            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Quest", quest, 1)
+            wait(0.5)
+            for _,v in pairs(workspace.Enemies:GetChildren()) do
+                if v.Name == mob and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+                    repeat
+                        pcall(function()
+                            local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+                            hrp.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 5, 0)
+                            game:GetService("VirtualInputManager"):SendKeyEvent(true, "Z", false, game)
+                        end)
+                        wait()
+                    until v.Humanoid.Health <= 0 or not v.Parent
+                end
+            end
+        end
+    end
+end)
 
--- 6. Auto Farm spawn(function() while wait(1) do local q = getQuest() if q then local questName, mobName, questPos = unpack(q) game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Quest", questName, 1) for _, v in pairs(workspace.Enemies:GetChildren()) do if v.Name == mobName and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then repeat pcall(function() game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0,5,0) game:GetService("VirtualInputManager"):SendKeyEvent(true, "Z", false, game) end) wait() until v.Humanoid.Health <= 0 or not v.Parent end end end end end)
+-- Auto nhặt trái ác quỷ
+spawn(function()
+    while wait(10) do
+        for _,obj in pairs(workspace:GetDescendants()) do
+            if obj:IsA("Tool") and obj:FindFirstChild("Handle") and obj.Name:lower():find("fruit") then
+                local hrp = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                if hrp then
+                    hrp.CFrame = obj.Handle.CFrame
+                    wait(0.3)
+                    firetouchinterest(hrp, obj.Handle, 0)
+                    firetouchinterest(hrp, obj.Handle, 1)
+                end
+            end
+        end
+    end
+end)
 
--- 7. Auto nhặt trái ác quỷ spawn(function() while wait(30) do for _, obj in pairs(game.Workspace:GetDescendants()) do if obj:IsA("Tool") and string.find(obj.Name:lower(), "fruit") then game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = obj.Handle.CFrame wait(0.5) firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, obj.Handle, 0) end end end end)
-
+-- Auto chuyển Sea 2 và Sea 3
+spawn(function()
+    while wait(15) do
+        local lv = game.Players.LocalPlayer.Data.Level.Value
+        if lv >= 700 and game.PlaceId == 2753915549 then
+            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("TravelDressrosa")
+        elseif lv >= 1500 and game.PlaceId == 4442272183 then
+            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("TravelZou")
+        end
+    end
+end)
