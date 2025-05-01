@@ -1,57 +1,58 @@
--- UI đơn giản
+--// UI Đơn giản khi farm
 local gui = Instance.new("ScreenGui", game.Players.LocalPlayer:WaitForChild("PlayerGui"))
-gui.Name = "KaitoMCUI"
-
+gui.Name = "KaitoUI"
 local frame = Instance.new("Frame", gui)
 frame.Size = UDim2.new(0, 300, 0, 100)
 frame.Position = UDim2.new(0.5, -150, 0.05, 0)
 frame.BackgroundTransparency = 1
-
 local image = Instance.new("ImageLabel", frame)
 image.Size = UDim2.new(0, 100, 0, 100)
 image.Position = UDim2.new(0, 0, 0, 0)
 image.BackgroundTransparency = 1
 image.Image = "rbxassetid://137349437844122"
-
 local text = Instance.new("TextLabel", frame)
 text.Size = UDim2.new(1, -100, 1, 0)
 text.Position = UDim2.new(0, 100, 0, 0)
-text.Text = "Đang farm level..."
-text.TextColor3 = Color3.fromRGB(255,255,255)
+text.Text = "Đang Farm Level..."
+text.TextColor3 = Color3.fromRGB(255, 255, 255)
 text.BackgroundTransparency = 1
 text.TextScaled = true
 
--- Auto nhập code
+--// Auto nhập code x2 EXP
 local codes = {"kittgaming", "Sub2Fer999", "Enyu_is_Pro", "Magicbus", "JCWK", "Starcodeheo"}
-for _,v in pairs(codes) do
+for _, code in pairs(codes) do
     pcall(function()
-        game:GetService("ReplicatedStorage").Remotes.Redeem:InvokeServer(v)
+        game:GetService("ReplicatedStorage").Remotes.Redeem:InvokeServer(code)
     end)
 end
 
--- Auto mua Haki
+--// Auto mua Buso và Vỏ Vua Haki
 spawn(function()
     while wait(5) do
-        if not game.Players.LocalPlayer.Character:FindFirstChild("HasBuso") then
+        local char = game.Players.LocalPlayer.Character
+        if not char:FindFirstChild("HasBuso") then
             game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyHaki")
+        end
+        if not char:FindFirstChild("Aura") then
+            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyItem", "Black Cape")
         end
     end
 end)
 
--- Auto nâng điểm
+--// Auto nâng điểm (ưu tiên Melee và Energy)
 spawn(function()
     while wait(10) do
         local stats = game.Players.LocalPlayer.Data.Stats
         local p = stats.Available.Value
         if p > 0 then
-            local half = math.floor(p/2)
+            local half = math.floor(p / 2)
             game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AddPoint", "Melee", half)
             game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AddPoint", "Energy", p - half)
         end
     end
 end)
 
--- Danh sách nhiệm vụ
+--// Danh sách nhiệm vụ theo level
 function getQuest()
     local lv = game.Players.LocalPlayer.Data.Level.Value
     if lv < 10 then return {"BanditQuest1", "Bandit", CFrame.new(1038, 16, 1547)}
@@ -78,7 +79,7 @@ function getQuest()
     else return nil end
 end
 
--- Auto farm
+--// Auto farm (bay cao + spam đánh thường nhanh)
 spawn(function()
     while wait(1) do
         local q = getQuest()
@@ -86,15 +87,21 @@ spawn(function()
             local quest, mob, pos = unpack(q)
             game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Quest", quest, 1)
             wait(0.5)
-            for _,v in pairs(workspace.Enemies:GetChildren()) do
+            for _, v in pairs(workspace.Enemies:GetChildren()) do
                 if v.Name == mob and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
                     repeat
                         pcall(function()
-                            local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
-                            hrp.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 5, 0)
-                            game:GetService("VirtualInputManager"):SendKeyEvent(true, "Z", false, game)
+                            local hrp = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                            if hrp and v and v:FindFirstChild("HumanoidRootPart") then
+                                hrp.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 25, 0)
+                                for _ = 1, 3 do
+                                    game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, true, game, 0)
+                                    wait(0.03)
+                                    game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, false, game, 0)
+                                end
+                            end
                         end)
-                        wait()
+                        wait(0.03)
                     until v.Humanoid.Health <= 0 or not v.Parent
                 end
             end
@@ -102,7 +109,7 @@ spawn(function()
     end
 end)
 
--- Auto nhặt trái ác quỷ
+--// Auto nhặt trái ác quỷ
 spawn(function()
     while wait(10) do
         for _,obj in pairs(workspace:GetDescendants()) do
@@ -110,7 +117,7 @@ spawn(function()
                 local hrp = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
                 if hrp then
                     hrp.CFrame = obj.Handle.CFrame
-                    wait(0.3)
+                    wait(0.2)
                     firetouchinterest(hrp, obj.Handle, 0)
                     firetouchinterest(hrp, obj.Handle, 1)
                 end
@@ -119,7 +126,7 @@ spawn(function()
     end
 end)
 
--- Auto chuyển Sea 2 và Sea 3
+--// Auto chuyển Sea 2 và Sea 3
 spawn(function()
     while wait(15) do
         local lv = game.Players.LocalPlayer.Data.Level.Value
