@@ -1,138 +1,213 @@
---// UI Đơn giản khi farm
-local gui = Instance.new("ScreenGui", game.Players.LocalPlayer:WaitForChild("PlayerGui"))
-gui.Name = "KaitoUI"
-local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0, 300, 0, 100)
-frame.Position = UDim2.new(0.5, -150, 0.05, 0)
-frame.BackgroundTransparency = 1
-local image = Instance.new("ImageLabel", frame)
-image.Size = UDim2.new(0, 100, 0, 100)
-image.Position = UDim2.new(0, 0, 0, 0)
-image.BackgroundTransparency = 1
-image.Image = "rbxassetid://137349437844122"
-local text = Instance.new("TextLabel", frame)
-text.Size = UDim2.new(1, -100, 1, 0)
-text.Position = UDim2.new(0, 100, 0, 0)
-text.Text = "Đang Farm Level..."
-text.TextColor3 = Color3.fromRGB(255, 255, 255)
-text.BackgroundTransparency = 1
-text.TextScaled = true
+-- Script Blox Fruits hoàn chỉnh by KaitoMC276 - Đừng xóa credit
+repeat wait() until game:IsLoaded()
 
---// Auto nhập code x2 EXP
-local codes = {
-    "kittgaming", "Sub2Fer999", "Enyu_is_Pro", "Magicbus", "JCWK", "Starcodeheo",
-    "Bluxxy", "Sub2CaptainMaui", "StrawHatMaine", "SUB2NOOBMASTER123",
-    "Axiore", "TantaiGaming", "Sub2Daigrock", "BIGNEWS", "TheGreatAce",
-    "FUDD10", "FUDD10_V2", "Sub2UncleKizaru"
+-- Thông báo khi chạy script
+game.StarterGui:SetCore("SendNotification", {
+	Title = "Script Blox Fruits";
+	Text = "Nhớ đăng kí kênh và ủng hộ tác giả KaitoMC276 nhé!";
+	Duration = 10;
+})
+
+-- Auto nhập code x2 EXP
+spawn(function()
+	local codes = {
+		"EXP_5B", "kittgaming", "Sub2Fer999", "Enyu_is_Pro",
+		"Magicbus", "JCWK", "Starcodeheo", "Bluxxy",
+		"fudd10_v2", "fudd10", "SUB2GAMERROBOT_EXP1",
+		"Sub2OfficialNoobie", "TheGreatAce", "Axiore",
+		"TantaiGaming", "StrawHatMaine", "Sub2NoobMaster123"
+	}
+	for _, v in pairs(codes) do
+		pcall(function()
+			game:GetService("ReplicatedStorage").Remotes.RedeemCode:InvokeServer(v)
+		end)
+		wait(1)
+	end
+end)
+
+-- Auto mua Haki
+spawn(function()
+	while wait(5) do
+		pcall(function()
+			if not game.Players.LocalPlayer.Character:FindFirstChild("HasBuso") then
+				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyHaki", "Buso")
+			end
+			if not game.Players.LocalPlayer.Character:FindFirstChild("EnhancedArmament") then
+				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyHaki", "Enhancement")
+			end
+		end)
+	end
+end)
+
+-- Auto nâng điểm
+spawn(function()
+	while wait(2) do
+		pcall(function()
+			local points = game.Players.LocalPlayer.Data.Points
+			if points.Value > 0 then
+				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AddPoint", "Melee", points.Value)
+			end
+		end)
+	end
+end)
+
+-- Auto nhặt trái và cất vào kho
+spawn(function()
+	while wait(3) do
+		for _, item in pairs(workspace:GetChildren()) do
+			if item:IsA("Tool") and item:FindFirstChild("Handle") then
+				game.Players.LocalPlayer.Character.Humanoid:EquipTool(item)
+				wait(1)
+				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("StoreFruit", item.Name)
+			end
+		end
+	end
+end)
+
+-- Auto random trái
+spawn(function()
+	while wait(300) do
+		pcall(function()
+			game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Cousin", "Buy")
+		end)
+	end
+end)
+
+-- Auto chuyển Sea 2/Sea 3
+spawn(function()
+	while wait(10) do
+		local level = game.Players.LocalPlayer.Data.Level.Value
+		if level >= 700 and game.PlaceId == 2753915549 then
+			game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("TravelDressrosa")
+		elseif level >= 1500 and game.PlaceId == 4442272183 then
+			game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("TravelZou")
+		end
+	end
+end)
+
+-- Auto mua tam kiếm huyền thoại
+spawn(function()
+	while wait(30) do
+		pcall(function()
+			game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyItem", "Triple Katana")
+		end)
+	end
+end)
+
+-- Auto lấy Yama Sea 3
+spawn(function()
+	while wait(20) do
+		pcall(function()
+			if game.PlaceId == 7449423635 then
+				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("GetYama")
+			end
+		end)
+	end
+end)
+
+-- Danh sách boss theo level
+local bosses = {
+	{ name = "Mob Leader" },
+	{ name = "Vice Admiral" },
+	{ name = "Warden" },
+	{ name = "Chief Warden" },
+	{ name = "Swan" },
+	{ name = "Magma Admiral" },
+	{ name = "Ice Admiral" },
+	{ name = "Smoke Admiral" },
+	{ name = "Don Swan" },
+	{ name = "Cursed Captain" },
+	{ name = "Stone" },
+	{ name = "Island Empress" },
+	{ name = "Kilo Admiral" },
+	{ name = "Captain Elephant" },
+	{ name = "Beautiful Pirate" },
+	{ name = "Longma" },
+	{ name = "rip_indra" },
+	{ name = "Cake Queen" },
+	{ name = "Order" },
+	{ name = "Great Tree" },
+	{ name = "King Samurai" },
+	{ name = "Sea King" },
+	{ name = "Giant Islander" },
+	{ name = "Monkey King" },
 }
-for _, code in pairs(codes) do
-    pcall(function()
-        game:GetService("ReplicatedStorage").Remotes.Redeem:InvokeServer(code)
-    end)
+
+-- Đánh boss khi cùng level
+spawn(function()
+	while wait(1) do
+		for _, boss in pairs(bosses) do
+			for _, v in pairs(workspace.Enemies:GetChildren()) do
+				if v.Name == boss.name and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+					local plvl = game.Players.LocalPlayer.Data.Level.Value
+					if v:FindFirstChild("Level") and plvl >= v.Level.Value then
+						game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AbandonQuest")
+						game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 25, 0)
+						repeat
+							game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, true, game, 0)
+							wait(0.03)
+							game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, false, game, 0)
+							wait(0.03)
+						until not v.Parent or v.Humanoid.Health <= 0
+					end
+				end
+			end
+		end
+	end
+end)
+
+-- Farm level thường khi không có boss
+local function getQuestInfo()
+	local lvl = game.Players.LocalPlayer.Data.Level.Value
+	if lvl <= 10 then
+		return "BanditQuest1", "Bandit", Vector3.new(1060, 16, 1547), 1
+	elseif lvl <= 30 then
+		return "BuggyQuest1", "Pirate", Vector3.new(-1125, 14, 3938), 1
+	elseif lvl <= 60 then
+		return "BuggyQuest1", "Brute", Vector3.new(-1199, 25, 4285), 2
+	elseif lvl >= 2450 then
+		return "AmazonQuest", "Island Empress", Vector3.new(5444, 752, -289), 2
+	end
 end
 
---// Auto mua Buso và Vỏ Vua Haki
 spawn(function()
-    while wait(5) do
-        local char = game.Players.LocalPlayer.Character
-        if not char:FindFirstChild("HasBuso") then
-            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyHaki")
-        end
-        if not char:FindFirstChild("Aura") then
-            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyItem", "Black Cape")
-        end
-    end
-end)
-
---// Auto nâng điểm (ưu tiên Melee và Energy)
-spawn(function()
-    while wait(10) do
-        local stats = game.Players.LocalPlayer.Data.Stats
-        local p = stats.Available.Value
-        if p > 0 then
-            local half = math.floor(p / 2)
-            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AddPoint", "Melee", half)
-            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AddPoint", "Energy", p - half)
-        end
-    end
-end)
-
-
---// PHẦN 2
-
-
--- Phần 2: Tiếp tục các chức năng nâng cao (Elite, Katakuri, Rip Indra, lấy Yama, v.v.)
-
---// Auto đánh Katakuri V1 và V2, Rip Indra nếu có
-spawn(function()
-    while wait(10) do
-        for _, boss in pairs({"Cake Prince", "Cocoa Warrior", "rip_indra"}) do
-            for _, v in pairs(workspace.Enemies:GetChildren()) do
-                if string.find(v.Name:lower(), boss:lower()) and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
-                    repeat
-                        pcall(function()
-                            local hrp = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                            if hrp and v and v:FindFirstChild("HumanoidRootPart") then
-                                hrp.CFrame = v.HumanoidRootPart.CFrame * CFrame.new(0, 25, 0)
-                                for _ = 1, 3 do
-                                    game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, true, game, 0)
-                                    wait(0.03)
-                                    game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, false, game, 0)
-                                end
-                            end
-                        end)
-                        wait(0.03)
-                    until v.Humanoid.Health <= 0 or not v.Parent
-                end
-            end
-        end
-    end
-end)
-
---// Auto lấy Yama (cần đã đủ điều kiện)
-spawn(function()
-    while wait(15) do
-        if game.PlaceId == 7449423635 then -- Sea 3
-            pcall(function()
-                local args = {
-                    [1] = "Yama",
-                    [2] = "Check",
-                }
-                game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
-                wait(2)
-                local args2 = {
-                    [1] = "Yama",
-                    [2] = "Get",
-                }
-                game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args2))
-            end)
-        end
-    end
-end)
-
---// Auto mua Tam Kiếm Huyền Thoại nếu đủ tiền
-spawn(function()
-    while wait(15) do
-        local beli = game.Players.LocalPlayer.Data.Beli.Value
-        if beli >= 2000000 then
-            pcall(function()
-                game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyItem", "True Triple Katana")
-            end)
-        end
-    end
-end)
-
---// Auto random trái và cất vào kho
-spawn(function()
-    while wait(600) do -- 10 phút/lần
-        pcall(function()
-            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Cousin", "Buy")
-            wait(1)
-            for _, item in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                if item:IsA("Tool") and item:FindFirstChild("Fruit") then
-                    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("StoreFruit", item.Name)
-                end
-            end
-        end)
-    end
+	while wait(2) do
+		local bossStillAlive = false
+		for _, boss in pairs(bosses) do
+			for _, v in pairs(workspace.Enemies:GetChildren()) do
+				if v.Name == boss.name and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+					bossStillAlive = true
+					break
+				end
+			end
+		end
+		if not bossStillAlive then
+			local qname, enemy, pos, qid = getQuestInfo()
+			if qname then
+				pcall(function()
+					game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Quest", "Begin", qname, qid)
+					wait(1)
+					local hrp = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+					hrp.CFrame = CFrame.new(pos)
+					wait(1)
+					for _, mob in pairs(workspace.Enemies:GetChildren()) do
+						if mob.Name == enemy and mob:FindFirstChild("HumanoidRootPart") and mob.Humanoid.Health > 0 then
+							repeat
+								local char = game.Players.LocalPlayer.Character
+								if char and mob:FindFirstChild("HumanoidRootPart") then
+									char.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame * CFrame.new(0, 25, 0)
+									for _ = 1, 3 do
+										game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, true, game, 0)
+										wait(0.03)
+										game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, false, game, 0)
+										wait(0.03)
+									end
+								end
+							until mob.Humanoid.Health <= 0 or not mob.Parent
+						end
+					end
+				end)
+			end
+		end
+	end
 end)
