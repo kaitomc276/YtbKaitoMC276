@@ -1,207 +1,248 @@
--- SCRIPT FARM BLOX FRUITS FULL CHO R-TOI EXECUTOR | TẠO BỞI KAITO ĐÃ FIX
+--// UI hiển thị khi farm
+local StarterGui = game:GetService("StarterGui")
+StarterGui:SetCore("SendNotification", {
+	Title = "Auto Farm Blox Fruits",
+	Text = "Script đang khởi động...",
+	Duration = 5
+})
 
-_G.Settings = {
-    FarmMode = "Auto",
-    UseMelee = true,
-    HitSpeed = 0.03,
-    SafeHeight = 25,
+--// Auto nhập code x2 EXP
+local codes = {
+    "SUB2GAMERROBOT_EXP1", "Sub2OfficialNoobie", "StrawHatMaine",
+    "Sub2NoobMaster123", "Sub2UncleKizaru", "Sub2Daigrock", "Axiore",
+    "TantaiGaming", "Bignews", "FUDD10", "FUDD10_V2", "THEGREATACE",
+    "Bluxxy", "Enyu_is_Pro", "Magicbus", "JCWK", "Starcodeheo"
 }
-
--- UI trạng thái farm
-local function UpdateFarmStatus(status)
-    local plr = game.Players.LocalPlayer
-    local userId = plr.UserId
-    if not game.CoreGui:FindFirstChild("FarmStatusUI") then
-        local scrGui = Instance.new("ScreenGui", game.CoreGui)
-        scrGui.Name = "FarmStatusUI"
-
-        local img = Instance.new("ImageLabel", scrGui)
-        img.Name = "Avatar"
-        img.Size = UDim2.new(0, 100, 0, 100)
-        img.Position = UDim2.new(0.5, -50, 0.4, 0)
-        img.BackgroundTransparency = 1
-        img.Image = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. userId .. "&width=420&height=420&format=png"
-
-        local txt = Instance.new("TextLabel", scrGui)
-        txt.Name = "Status"
-        txt.Size = UDim2.new(0, 300, 0, 50)
-        txt.Position = UDim2.new(0.5, -150, 0.55, 0)
-        txt.BackgroundTransparency = 0.3
-        txt.BackgroundColor3 = Color3.new(0, 0, 0)
-        txt.TextColor3 = Color3.new(1, 1, 1)
-        txt.TextScaled = true
-        txt.Font = Enum.Font.GothamBold
-        txt.Text = status
-    else
-        game.CoreGui.FarmStatusUI.Status.Text = status
-    end
-end
-
--- Danh sách Boss
-local Bosses = {
-    {Name = "The Gorilla King", Level = 25},
-    {Name = "Bobby", Level = 55},
-    {Name = "Yeti", Level = 110},
-    {Name = "Vice Admiral", Level = 130},
-    {Name = "Warden", Level = 230},
-    {Name = "Swan", Level = 240},
-    {Name = "Magma Admiral", Level = 350},
-    {Name = "Fishman Lord", Level = 425},
-    {Name = "Wysper", Level = 500},
-    {Name = "Thunder God", Level = 575},
-    {Name = "Fujitora", Level = 950},
-    {Name = "Don Swan", Level = 1000},
-    {Name = "Cursed Captain", Level = 1325},
-    {Name = "Darkbeard", Level = 1000},
-    {Name = "Order", Level = 1250},
-    {Name = "Katakuri", Level = 2200},
-    {Name = "Rip Indra", Level = 2400}
-}
-
--- Tìm boss gần nhất theo level
-local function GetAvailableBoss()
-    local level = game.Players.LocalPlayer.Data.Level.Value
-    for i = #Bosses, 1, -1 do
-        local b = Bosses[i]
-        if level >= b.Level then
-            local boss = workspace.Enemies:FindFirstChild(b.Name)
-            if boss and boss:FindFirstChild("Humanoid") and boss.Humanoid.Health > 0 then
-                return boss, b.Name
-            end
-        end
-    end
-    return nil
-end
-
--- Dịch chuyển tới mob
-local function TPTo(target)
-    local plr = game.Players.LocalPlayer
-    if target:FindFirstChild("HumanoidRootPart") then
-        plr.Character:SetPrimaryPartCFrame(target.HumanoidRootPart.CFrame * CFrame.new(0, _G.Settings.SafeHeight, 0))
-    end
-end
-
--- Auto spam đánh thường
-local function AutoAttack()
-    local vim = game:GetService("VirtualInputManager")
-    while wait(_G.Settings.HitSpeed) do
-        vim:SendMouseButtonEvent(0, 0, 0, true, game, 1)
-        vim:SendMouseButtonEvent(0, 0, 0, false, game, 1)
-    end
-end
-spawn(AutoAttack)
-
--- Bật Haki
-local function EnableHaki()
-    local char = game.Players.LocalPlayer.Character
-    if char and not char:FindFirstChild("HasBuso") then
-        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Buso")
-    end
-end
 spawn(function()
-    while wait(2) do EnableHaki() end
-end)
-
--- Tự nâng điểm
-spawn(function()
-    while wait(5) do
+    for _, code in pairs(codes) do
         pcall(function()
-            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AddPoint", "Melee", 3)
-            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AddPoint", "Energy", 3)
+            game:GetService("ReplicatedStorage").Remotes.Redeem:InvokeServer(code)
         end)
+        wait(1)
     end
 end)
 
--- Tự chuyển Sea
-local function AutoSea()
-    local lv = game.Players.LocalPlayer.Data.Level.Value
-    if lv >= 700 and game.PlaceId ~= 4442272183 then
-        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("TravelDressrosa")
-    elseif lv >= 1500 and game.PlaceId ~= 7449423635 then
-        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("TravelZou")
-    end
+--// Auto bật Buso Haki & Vỏ Vua Haki
+spawn(function()
+	while wait(1) do
+		pcall(function()
+			if not game.Players.LocalPlayer.Character:FindFirstChild("HasBuso") then
+				game:GetService("VirtualInputManager"):SendKeyEvent(true, "J", false, game)
+				wait(1)
+			end
+			if not game.Players.LocalPlayer.Character:FindFirstChild("Aura") then
+				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyHaki", "Enhancement")
+				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyHaki", "Armor")
+			end
+		end)
+	end
+end)
+
+--// Auto nâng điểm (Melee và Energy)
+spawn(function()
+	while wait(3) do
+		pcall(function()
+			local stats = game.Players.LocalPlayer.Data
+			local points = stats.Stats.Points.Value
+			if points > 0 then
+				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AddPoint", "Melee", points)
+			end
+		end)
+	end
+end)
+
+function GetLevelData()
+	local level = game.Players.LocalPlayer.Data.Level.Value
+
+	-- Sea 1
+	if level <= 9 then return "BanditQuest1", "Bandit", Vector3.new(1060, 17, 1560), 1
+	elseif level <= 14 then return "BanditQuest2", "Monkey", Vector3.new(-1600, 38, 145), 2
+	elseif level <= 29 then return "BanditQuest2", "Gorilla", Vector3.new(-1255, 6, -510), 2
+	elseif level <= 39 then return "BuggyQuest1", "Pirate", Vector3.new(-1160, 4, 3970), 3
+	elseif level <= 59 then return "BuggyQuest1", "Brute", Vector3.new(-1145, 15, 4385), 3
+	elseif level <= 74 then return "BuggyQuest2", "Chief Petty Officer", Vector3.new(-4975, 30, 3145), 4
+	elseif level <= 89 then return "BaratieQuest1", "Chef", Vector3.new(-4540, 36, -1395), 5
+	elseif level <= 119 then return "BaratieQuest2", "Waiter", Vector3.new(-4485, 36, -1330), 5
+	elseif level <= 149 then return "BaratieQuest2", "Sous Chef", Vector3.new(-4490, 36, -1220), 5
+	elseif level <= 174 then return "DesertQuest1", "Desert Bandit", Vector3.new(924, 6, 4484), 6
+	elseif level <= 199 then return "DesertQuest1", "Desert Officer", Vector3.new(1572, 10, 4393), 6
+	elseif level <= 224 then return "SnowQuest1", "Snow Bandit", Vector3.new(1356, 87, -1327), 7
+	elseif level <= 249 then return "SnowQuest1", "Snowman", Vector3.new(1243, 120, -1578), 7
+	elseif level <= 274 then return "MarineQuest1", "Trainee", Vector3.new(-2394, 37, 3973), 8
+	elseif level <= 299 then return "MarineQuest1", "Rear Admiral", Vector3.new(-2434, 87, 4181), 8
+	elseif level <= 324 then return "SkyQuest1", "Sky Bandit", Vector3.new(-4981, 278, -2830), 9
+	elseif level <= 374 then return "SkyQuest2", "Dark Master", Vector3.new(-5251, 389, -2272), 9
+	elseif level <= 399 then return "ColosseumQuest", "Toga Warrior", Vector3.new(-1576, 7, -2985), 10
+	elseif level <= 449 then return "ColosseumQuest", "Gladiator", Vector3.new(-1294, 7, -3244), 10
+	elseif level <= 474 then return "MagmaQuest", "Military Soldier", Vector3.new(-5315, 7, 8517), 11
+	elseif level <= 499 then return "MagmaQuest", "Military Spy", Vector3.new(-5780, 7, 8820), 11
+	elseif level <= 524 then return "FishmanQuest", "Fishman Warrior", Vector3.new(60857, 18, 1546), 12
+	elseif level <= 549 then return "FishmanQuest", "Fishman Commando", Vector3.new(61122, 18, 1961), 12
+	elseif level <= 624 then return "SkyExp1Quest", "God's Guard", Vector3.new(-4698, 845, -1912), 13
+	elseif level <= 649 then return "SkyExp1Quest", "Shanda", Vector3.new(-5012, 845, -2071), 13
+	elseif level <= 674 then return "SkyExp2Quest", "Royal Squad", Vector3.new(-7900, 5556, -2113), 14
+	elseif level <= 700 then return "SkyExp2Quest", "Royal Soldier", Vector3.new(-7912, 5556, -2375), 14
+
+	-- Sea 2
+	elseif level <= 725 then return "FountainQuest", "Galley Pirate", Vector3.new(5589, 45, 3996), 1
+	elseif level <= 775 then return "FountainQuest", "Galley Captain", Vector3.new(5705, 45, 4291), 2
+	elseif level <= 800 then return "Area1Quest", "Raider", Vector3.new(-4232, 237, -7169), 1
+	elseif level <= 875 then return "Area1Quest", "Mercenary", Vector3.new(-4292, 254, -6886), 1
+	elseif level <= 925 then return "Area2Quest", "Swan Pirate", Vector3.new(878, 122, 1236), 1
+	elseif level <= 975 then return "Area2Quest", "Factory Staff", Vector3.new(558, 122, 1294), 1
+	elseif level <= 1025 then return "Area3Quest", "Marine Lieutenant", Vector3.new(-2872, 6, -9636), 1
+	elseif level <= 1075 then return "Area3Quest", "Marine Captain", Vector3.new(-2753, 6, -9633), 1
+	elseif level <= 1125 then return "MarineQuest3", "Zombie", Vector3.new(-5494, 47, -7942), 1
+	elseif level <= 1175 then return "MarineQuest3", "Vampire", Vector3.new(-5807, 47, -7875), 1
+	elseif level <= 1225 then return "SnowMountainQuest", "Snow Trooper", Vector3.new(605, 402, -5373), 1
+	elseif level <= 1275 then return "SnowMountainQuest", "Winter Warrior", Vector3.new(551, 402, -5947), 1
+	elseif level <= 1325 then return "ForgottenQuest", "Lab Subordinate", Vector3.new(-5765, 77, -10901), 1
+	elseif level <= 1375 then return "ForgottenQuest", "Horned Warrior", Vector3.new(-5332, 77, -10828), 1
+	elseif level <= 1425 then return "IceSideQuest", "Arctic Warrior", Vector3.new(5228, 23, -6506), 1
+	elseif level <= 1475 then return "IceSideQuest", "Snow Lurker", Vector3.new(5465, 23, -6817), 1
+	elseif level <= 1525 then return "IslandQuest", "Sea Soldier", Vector3.new(-3056, 236, -10145), 1
+	elseif level <= 1575 then return "IslandQuest", "Water Fighter", Vector3.new(-3185, 236, -9708), 1
+
+	-- Sea 3 (Thí dụ mốc)
+	elseif level <= 1600 then return "PiratePortQuest", "Pirate Millionaire", Vector3.new(-289, 44, 5555), 1
+	elseif level <= 1650 then return "PiratePortQuest", "Pistol Billionaire", Vector3.new(-451, 74, 5555), 2
+	elseif level <= 1700 then return "AmazonQuest", "Female Islander", Vector3.new(5316, 819, 129), 1
+	elseif level <= 1750 then return "AmazonQuest", "Giant Islander", Vector3.new(5480, 819, 284), 2
+	elseif level <= 1800 then return "MarineTreeIsland", "Marine Commodore", Vector3.new(225, 336, 3314), 1
+	elseif level <= 1850 then return "MarineTreeIsland", "Marine Rear Admiral", Vector3.new(376, 336, 3367), 2
+	elseif level <= 1900 then return "GreatTreeQuest", "Forest Pirate", Vector3.new(2268, 25, -6731), 1
+	elseif level <= 1950 then return "GreatTreeQuest", "Mythological Pirate", Vector3.new(2292, 25, -7010), 2
+	elseif level <= 2000 then return "HauntedQuest", "Reborn Skeleton", Vector3.new(-9445, 142, 5547), 1
+	elseif level <= 2050 then return "HauntedQuest", "Living Zombie", Vector3.new(-10185, 142, 5767), 2
+	elseif level <= 2100 then return "IceCreamIslandQuest", "Ice Cream Chef", Vector3.new(-7915, 15, -11470), 1
+	elseif level <= 2150 then return "IceCreamIslandQuest", "Ice Cream Commander", Vector3.new(-7895, 15, -11636), 2
+	elseif level <= 2200 then return "CakeQuest1", "Cookie Crafter", Vector3.new(-2022, 37, -12025), 1
+	elseif level <= 2250 then return "CakeQuest1", "Cake Guard", Vector3.new(-2095, 37, -12220), 2
+	elseif level <= 2300 then return "CakeQuest2", "Baking Staff", Vector3.new(-1926, 37, -12845), 1
+	elseif level <= 2350 then return "CakeQuest2", "Head Baker", Vector3.new(-2000, 37, -13030), 2
+	elseif level <= 2400 then return "PeanutQuest", "Peanut Scout", Vector3.new(-2095, 70, -10400), 1
+	elseif level <= 2450 then return "PeanutQuest", "Peanut President", Vector3.new(-2195, 70, -10600), 2
+	elseif level <= 2500 then return "CandyQuest1", "Candy Rebel", Vector3.new(-1150, 110, -10400), 1
+	elseif level <= 2550 then return "CandyQuest1", "Sweet Thief", Vector3.new(-1050, 110, -10550), 2
+	elseif level <= 2600 then return "CandyQuest2", "Sweet Commander", Vector3.new(-920, 110, -10660), 1
+	elseif level <= 2650 then return "CandyQuest2", "Cake Guard", Vector3.new(-800, 110, -10780), 2
+	elseif level <= 2660 then return "CandyQuest2", "Head Baker", Vector3.new(-700, 110, -10900), 2
+	end
+
+	return nil
 end
 
--- Dữ liệu nhiệm vụ Sea 1
-local questData = {
-    {Min = 10, Max = 14, Quest = "BanditQuest1", Mob = "Bandit"},
-    {Min = 15, Max = 29, Quest = "BanditQuest2", Mob = "Monkey"},
-    {Min = 30, Max = 39, Quest = "BanditQuest2", Mob = "Gorilla"},
-    {Min = 40, Max = 59, Quest = "BuggyQuest1", Mob = "Pirate"},
-    {Min = 60, Max = 74, Quest = "BuggyQuest1", Mob = "Brute"},
-    {Min = 75, Max = 89, Quest = "BuggyQuest2", Mob = "Sword"},
-    {Min = 90, Max = 119, Quest = "YetiQuest", Mob = "Snow Bandit"},
-    {Min = 120, Max = 149, Quest = "MarineQuest2", Mob = "Marine"},
-    {Min = 150, Max = 174, Quest = "MarineQuest2", Mob = "Commander"},
-    {Min = 175, Max = 199, Quest = "ImpelQuest", Mob = "Chief Petty Officer"},
-    {Min = 200, Max = 224, Quest = "ImpelQuest", Mob = "Sky Bandit"},
-    {Min = 225, Max = 274, Quest = "SkyQuest", Mob = "Dark Master"},
-    {Min = 275, Max = 299, Quest = "SkyQuest2", Mob = "Dark Master"},
-    {Min = 300, Max = 324, Quest = "PrisonerQuest", Mob = "Toga Warrior"},
-    {Min = 325, Max = 374, Quest = "PrisonerQuest", Mob = "Gladiator"},
-    {Min = 375, Max = 399, Quest = "MagmaQuest", Mob = "Military Soldier"},
-    {Min = 400, Max = 449, Quest = "MagmaQuest", Mob = "Military Spy"},
-    {Min = 450, Max = 474, Quest = "FishmanQuest", Mob = "Fishman Warrior"},
-    {Min = 475, Max = 524, Quest = "FishmanQuest", Mob = "Fishman Commando"},
-    {Min = 525, Max = 549, Quest = "SkyExp1", Mob = "God's Guard"},
-    {Min = 550, Max = 624, Quest = "SkyExp1", Mob = "Shanda"},
-    {Min = 625, Max = 649, Quest = "SkyExp2", Mob = "Royal Squad"},
-    {Min = 650, Max = 674, Quest = "SkyExp2", Mob = "Royal Soldier"},
-    {Min = 675, Max = 699, Quest = "SkyExp2", Mob = "Shanda"}
-}
-
--- Farm theo level
-local function AutoFarmLevel()
-    local level = game.Players.LocalPlayer.Data.Level.Value
-    for i, data in ipairs(questData) do
-        if level >= data.Min and level <= data.Max then
-            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("StartQuest", data.Quest, 1)
-            local mob = workspace.Enemies:FindFirstChild(data.Mob)
-            if mob and mob:FindFirstChild("Humanoid") then
-                repeat
-                    wait()
-                    UpdateFarmStatus("Đang Farm: " .. data.Mob)
-                    TPTo(mob)
-                until not mob or mob.Humanoid.Health <= 0
-            end
-            break
-        end
-    end
-end
-
--- Auto mua haki + triple katana
+--// Auto farm quái Sea 1
 spawn(function()
-    while wait(30) do
-        local gold = game.Players.LocalPlayer.Data.Beli.Value
-        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyHaki", "Buso")
-        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyHaki", "Coat")
-        if gold >= 2000000 then
-            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyItem", "True Triple Katana")
-        end
-    end
+	while wait(0.2) do
+		pcall(function()
+			local QuestName, EnemyName, Pos, QuestID = GetLevelData()
+			if QuestName then
+				local QuestRemote = game:GetService("ReplicatedStorage").Remotes.CommF_
+				QuestRemote:InvokeServer("Quest", QuestName, QuestID)
+				
+				for _, mob in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+					if mob.Name == EnemyName and mob:FindFirstChild("HumanoidRootPart") and mob.Humanoid.Health > 0 then
+						repeat wait(0.03)
+							pcall(function()
+								game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0, 25, 0)
+								game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, true, game, 0)
+								game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, false, game, 0)
+							end)
+						until mob.Humanoid.Health <= 0 or not mob.Parent
+					end
+				end
+			end
+		end)
+	end
+end)
+--// Auto chuyển Sea 2 khi level 700+
+spawn(function()
+	while wait(10) do
+		pcall(function()
+			if game.Players.LocalPlayer.Data.Level.Value >= 700 and game.PlaceId == 2753915549 then
+				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("TravelDressrosa")
+			end
+		end)
+	end
 end)
 
--- Auto random trái + lưu vào kho
+--// Auto chuyển Sea 3 khi level 1500+
 spawn(function()
-    while wait(600) do
-        pcall(function()
-            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("GetFruits")
-            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("StoreFruit", "Random")
-        end)
-    end
+	while wait(10) do
+		pcall(function()
+			if game.Players.LocalPlayer.Data.Level.Value >= 1500 and game.PlaceId == 4442272183 then
+				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("TravelZou")
+			end
+		end)
+	end
 end)
 
--- MAIN LOOP
+--// Auto farm boss Katakuri v1/v2, Rip Indra
+local BossList = {"Cake Queen", "rip_indra", "Cursed Captain", "Longma", "Stone", "Island Empress"}
 spawn(function()
-    while wait() do
-        AutoSea()
-        local boss, bossName = GetAvailableBoss()
-        if boss then
-            UpdateFarmStatus("Đang Farm Boss: " .. bossName)
-            repeat wait() TPTo(boss) until not boss or boss.Humanoid.Health <= 0
-        else
-            UpdateFarmStatus("Đang Farm Level...")
-            AutoFarmLevel()
-        end
-    end
+	while wait(5) do
+		for _, boss in pairs(workspace.Enemies:GetChildren()) do
+			if table.find(BossList, boss.Name) and boss:FindFirstChild("HumanoidRootPart") then
+				repeat wait(0.03)
+					pcall(function()
+						game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = boss.HumanoidRootPart.CFrame + Vector3.new(0, 25, 0)
+						game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, true, game, 0)
+						game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, false, game, 0)
+					end)
+				until boss.Humanoid.Health <= 0 or not boss.Parent
+			end
+		end
+	end
+end)
+
+--// Auto nhặt trái ác quỷ rơi
+spawn(function()
+	while wait(3) do
+		for _, fruit in pairs(workspace:GetChildren()) do
+			if fruit:IsA("Tool") and fruit:FindFirstChild("Handle") then
+				pcall(function()
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = fruit.Handle.CFrame
+					wait(0.3)
+				end)
+			end
+		end
+	end
+end)
+
+--// Auto random trái và cất vào kho
+spawn(function()
+	while wait(600) do
+		pcall(function()
+			game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("Cousin", "Buy")
+			wait(1)
+			for _, item in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+				if item:IsA("Tool") and string.find(item.Name, "Fruit") then
+					game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("StoreFruit", item.Name)
+				end
+			end
+		end)
+	end
+end)
+
+--// Auto mua Tam Kiếm Huyền Thoại khi đủ tiền
+spawn(function()
+	while wait(60) do
+		local money = game.Players.LocalPlayer.Data.Beli.Value
+		if money >= 2000000 then
+			game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyItem", "Triple Katana")
+		end
+	end
+end)
+
+--// Auto lấy Yama ở Sea 3 (nếu đủ điều kiện)
+spawn(function()
+	while wait(15) do
+		pcall(function()
+			if game.PlaceId == 7449423635 then -- Sea 3
+				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("LoadYama")
+				game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("GetYama")
+			end
+		end)
+	end
 end)
