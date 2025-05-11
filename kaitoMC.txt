@@ -39,6 +39,18 @@ spawn(function()
 	end
 end)
 
+spawn(function()
+    while wait(2) do
+        pcall(function()
+            for _, tool in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                if tool:IsA("Tool") and string.find(tool.Name, "Combat") or string.find(tool.Name, "Melee") then
+                    game.Players.LocalPlayer.Character.Humanoid:EquipTool(tool)
+                end
+            end
+        end)
+    end
+end)
+
 --// Auto nâng điểm (Melee và Energy)
 spawn(function()
 	while wait(3) do
@@ -52,71 +64,53 @@ spawn(function()
 	end
 end)
 
---// Auto Farm chính (gồm: nhận nhiệm vụ, chọn Melee, bay cao, gom quái, spam đánh)
-local plr = game.Players.LocalPlayer
-local rep = game:GetService("ReplicatedStorage")
-local vir = game:GetService("VirtualInputManager")
-local runService = game:GetService("RunService")
-local tween = game:GetService("TweenService")
-local char = plr.Character or plr.CharacterAdded:Wait()
+-- Đặt các thông số cơ bản
+local FarmSpeed = 0.01 -- Tốc độ đánh
+local MaxLevel = 2650 -- Cấp độ tối đa
 
-function GetNearestEnemy(name)
-	local closest = nil
-	local shortest = math.huge
-	for _, v in pairs(workspace.Enemies:GetChildren()) do
-		if v:FindFirstChild("HumanoidRootPart") and v.Name == name and v:FindFirstChild("Humanoid") and v.Humanoid.Health > 0 then
-			local dist = (v.HumanoidRootPart.Position - char.HumanoidRootPart.Position).Magnitude
-			if dist < shortest then
-				shortest = dist
-				closest = v
-			end
-		end
-	end
-	return closest
+-- Hàm tự động chọn Melee nếu chưa có
+local function AutoSetMelee()
+    if game.Players.LocalPlayer.Character:FindFirstChild("Melee") == nil then
+        game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetStat", "Melee")
+    end
 end
 
-function Farm()
-	while task.wait() do
-		pcall(function()
-			local questName, mobName, mobPos = GetLevelData()
-			local quest = plr.PlayerGui.Main.Quest
-
-			-- Nhận nhiệm vụ nếu chưa có
-			if not quest.Visible then
-				local questRemote = rep.Remotes.CommF_
-				questRemote:InvokeServer("StartQuest", questName, 1)
-				wait(1)
-			end
-
-			-- Tìm và gom quái
-			local enemy = GetNearestEnemy(mobName)
-			if enemy then
-				-- Bay trên cao đứng yên
-				local hrp = char:FindFirstChild("HumanoidRootPart")
-				if hrp then
-					hrp.Anchored = true
-					hrp.CFrame = CFrame.new(enemy.HumanoidRootPart.Position + Vector3.new(0, 30, 0))
-				end
-
-				-- Gom tất cả quái cùng tên gần đó
-				for _, v in pairs(workspace.Enemies:GetChildren()) do
-					if v.Name == mobName and v:FindFirstChild("HumanoidRootPart") then
-						v.HumanoidRootPart.CFrame = enemy.HumanoidRootPart.CFrame
-						v.HumanoidRootPart.Anchored = true
-					end
-				end
-
-				-- Tự động chọn Melee và spam đánh
-				local tool = plr.Backpack:FindFirstChildOfClass("Tool")
-				if tool and tool.ToolTip == "Melee" then
-					tool.Parent = char
-				end
-				vir:SendMouseButtonEvent(0, 0, 0, true, game, 0)
-				vir:SendMouseButtonEvent(0, 0, 0, false, game, 0)
-			end
-		end)
-	end
+-- Hàm tự động farm và gom quái
+local function AutoFarm()
+    while game.Players.LocalPlayer.Data.Level.Value < MaxLevel do
+        local level = game.Players.LocalPlayer.Data.Level.Value
+        local mobs = workspace.Enemies:GetChildren()
+        
+        -- Gom quái lại và farm
+        for _, mob in pairs(mobs) do
+            if mob:FindFirstChild("HumanoidRootPart") then
+                -- Tạo điều kiện gom quái (vd: ở gần nhau)
+                if (mob.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude < 100 then
+                    -- Spam đánh quái
+                    fireclickdetector(mob:FindFirstChildOfClass("ClickDetector"))
+                end
+            end
+        end
+        
+        -- Tăng tốc độ farm
+        wait(FarmSpeed)
+        
+        -- Tự động nhận nhiệm vụ theo level
+        if level < MaxLevel then
+            game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("AcceptQuest", "FarmQuest")
+        end
+    end
 end
+
+-- Hàm kích hoạt tất cả các tính năng
+local function StartFarming()
+    AutoSetMelee() -- Đảm bảo Melee được chọn
+    AutoFarm() -- Tự động farm
+    AutoAllocateStats() -- Tự động phân bổ điểm
+end
+
+-- Bắt đầu farm
+StartFarming()
 
 -- Khởi động Auto Farm
 spawn(Farm)
@@ -128,10 +122,25 @@ StarterGui:SetCore("SendNotification", {
 	Duration = 5
 })
 
-function GetLevelData()
-	local level = game.Players.LocalPlayer.Data.Level.Value
+local Player = game.Players.LocalPlayer
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Workspace = game:GetService("Workspace")
+local QuestRemote = ReplicatedStorage.Remotes.CommF_
 
-	-- Sea 1
+-- Get Sea
+local PlaceId = game.PlaceId
+local Sea = 1
+if PlaceId == 2753915549 then
+    Sea = 1
+elseif PlaceId == 4442272183 then
+    Sea = 2
+elseif PlaceId == 7449423635 then
+    Sea = 3
+end
+
+function GetLevelData()
+    local level = Player.Data.Level.Value
+  	-- Sea 1
 	if level <= 9 then return "BanditQuest1", "Bandit", Vector3.new(1060, 17, 1560), 1
 	elseif level <= 14 then return "BanditQuest2", "Monkey", Vector3.new(-1600, 38, 145), 2
 	elseif level <= 29 then return "BanditQuest2", "Gorilla", Vector3.new(-1255, 6, -510), 2
@@ -209,6 +218,46 @@ function GetLevelData()
 	return nil
 end
 
+end
+
+function EquipWeapon()
+    for _, tool in pairs(Player.Backpack:GetChildren()) do
+        if tool:IsA("Tool") and (tool.Name:find("Sword") or tool.Name:find("Fist") or tool.Name:find("Combat") or tool.Name:find("Style")) then
+            Player.Character.Humanoid:EquipTool(tool)
+            break
+        end
+    end
+end
+
+spawn(function()
+    while task.wait(0.5) do
+        pcall(function()
+            local QuestName, EnemyName, Pos, QuestID = GetLevelData()
+            if not QuestName then return end
+
+            -- Nếu chưa có nhiệm vụ, thì nhận
+            if not Player.PlayerGui:FindFirstChild("Main") or not Player.PlayerGui.Main:FindFirstChild("Quest") then
+                QuestRemote:InvokeServer("Quest", QuestName, QuestID)
+                task.wait(1)
+            end
+
+            -- Tìm và đánh quái
+            for _, mob in pairs(Workspace.Enemies:GetChildren()) do
+                if mob.Name == EnemyName and mob:FindFirstChild("HumanoidRootPart") and mob.Humanoid.Health > 0 then
+                    EquipWeapon()
+                    repeat task.wait(0.05)
+                        pcall(function()
+                            Player.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0, 30, 0)
+                            game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, true, game, 0)
+                        end)
+                    until not mob.Parent or mob.Humanoid.Health <= 0
+                end
+            end
+        end)
+    end
+end)
+
+
 --// Auto farm quái Sea 1
 spawn(function()
 	while wait(0.2) do
@@ -224,7 +273,6 @@ spawn(function()
 							pcall(function()
 								game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = mob.HumanoidRootPart.CFrame + Vector3.new(0, 25, 0)
 								game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, true, game, 0)
-								game:GetService("VirtualInputManager"):SendMouseButtonEvent(0, 0, 0, false, game, 0)
 							end)
 						until mob.Humanoid.Health <= 0 or not mob.Parent
 					end
@@ -276,14 +324,17 @@ end)
 --// Auto nhặt trái ác quỷ rơi
 spawn(function()
 	while wait(3) do
-		for _, fruit in pairs(workspace:GetChildren()) do
-			if fruit:IsA("Tool") and fruit:FindFirstChild("Handle") then
-				pcall(function()
+		pcall(function()
+			for _, fruit in pairs(game.Workspace:GetChildren()) do
+				if fruit:IsA("Tool") and string.find(fruit.Name, "Fruit") then
 					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = fruit.Handle.CFrame
-					wait(0.3)
-				end)
+					wait(0.5)
+					firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, fruit.Handle, 0)
+					wait(0.1)
+					firetouchinterest(game.Players.LocalPlayer.Character.HumanoidRootPart, fruit.Handle, 1)
+				end
 			end
-		end
+		end)
 	end
 end)
 
